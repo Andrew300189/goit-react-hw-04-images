@@ -15,15 +15,15 @@ function App() {
   const [modalImageUrl, setModalImageUrl] = useState('');
 
   const handleSearch = (query) => {
-    setImages([]);
-    setQuery(query);
-    setPage(1);
+    if (query.trim() !== '') {
+      setImages([]);
+      setQuery(query);
+      setPage(1);
+    }
   };
 
   const handleLoadMore = () => {
-    if (query.trim() !== '') {
-      setPage((prevPage) => prevPage + 1);
-    }
+    setPage((prevPage) => prevPage + 1);
   };
 
   const handleOpenModal = (imageUrl) => {
@@ -35,6 +35,15 @@ function App() {
     setShowModal(false);
     setModalImageUrl('');
   };
+
+  const handleKeyPress = useCallback(
+    (event) => {
+      if (event.key === 'Escape') {
+        handleCloseModal();
+      }
+    },
+    []
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,6 +65,13 @@ function App() {
   }, [query, page]);
 
   const shouldShowLoadMoreButton = images.length > 0 && query.trim() !== '';
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyPress);
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [handleKeyPress]);
 
   return (
     <div className="App">
