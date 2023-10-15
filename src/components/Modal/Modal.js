@@ -1,18 +1,29 @@
-import React, { useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import styles from './Modal.module.css';
 
 const Modal = ({ imageUrl, onClose }) => {
-  const handleCloseModalOnBackdropClick = useCallback(
+  const handleKeyPress = useCallback(
     (event) => {
-      if (event.target === event.currentTarget) {
+      if (event.key === 'Escape') {
         onClose();
       }
     },
     [onClose]
   );
 
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyPress);
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [handleKeyPress]);
+
+  const handleCloseModal = () => {
+    onClose();
+  };
+
   return (
-    <div className={styles.overlay} onClick={handleCloseModalOnBackdropClick}>
+    <div className={styles.overlay} onClick={handleCloseModal}>
       <div className={styles.modal}>
         <img src={imageUrl} alt="Modal" />
       </div>

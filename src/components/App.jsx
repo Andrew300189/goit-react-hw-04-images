@@ -57,22 +57,6 @@ function App() {
 
   const shouldShowLoadMoreButton = images.length > 0 && query.trim() !== '';
 
-  const handleKeyPress = useCallback(
-    (event) => {
-      if (event.key === 'Escape') {
-        handleCloseModal();
-      }
-    },
-    []
-  );
-
-  useEffect(() => {
-    window.addEventListener('keydown', handleKeyPress);
-    return () => {
-      window.removeEventListener('keydown', handleKeyPress);
-    };
-  }, [handleKeyPress]);
-
   return (
     <div className="App">
       <Searchbar onSearch={handleSearch} />
